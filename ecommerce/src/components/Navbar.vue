@@ -103,11 +103,10 @@
 
     methods: {
       goToLandingPage(){
-        router.push('')
+        router.push('/')
       },
 
       prueba(){
-        console.log("prueba")
       }
     }
   }

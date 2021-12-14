@@ -93,6 +93,7 @@
   color: rgb(255, 239, 0);
   position: relative;
   left: 100px;
+  font-family: titleFont;
 }
 
 .messageLabelDesktop {
@@ -127,6 +128,7 @@
   font-size: 8vw;
   color: rgb(255, 239, 0);
   position: relative;
+  font-family: titleFont;
 }
 
 .messageLabelMobile {
