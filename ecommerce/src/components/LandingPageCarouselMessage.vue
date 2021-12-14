@@ -1,9 +1,9 @@
 <template>
   <div class="messageContainerDesktop" v-if="screenSize=='desktop'">
-    <h3 class="messageLabelDesktop">{{carouselMessage}}</h3>
+    <h3 class="messageCarouselLabelDesktop">{{carouselMessage}}</h3>
   </div>
   <div class="messageContainerMobile" v-else>
-    <h3 class="messageLabelMobile">{{carouselMessage}}</h3>
+    <h3 class="messageCarouselLabelMobile">{{carouselMessage}}</h3>
   </div>
 </template>
 
@@ -12,26 +12,22 @@
   .messageContainerDesktop{
     position: relative;
     background-color: black;
-    height: 30px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    text-align: center;
   }
 
   .messageContainerMobile{
     position: relative;
     background-color: black;
-    height: 3.5vw;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    text-align: center;
   }
 
-  .messageLabelDesktop{
-    color: rgb(0, 197, 33); 
+  .messageCarouselLabelDesktop{
+    color: rgb(0, 197, 33);
+    align-self: center;
+    position: relative;
   }
 
-  .messageLabelMobile{
+  .messageCarouselLabelMobile{
     color: rgb(0, 197, 33); 
     font-size: 2vw;
   }

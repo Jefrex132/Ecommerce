@@ -75,7 +75,7 @@
 <script>
   import router from '../router/index';
   export default {
-    name: 'LandingPageNavbar',
+    name: 'Navbar',
 
     data: () => ({ 
       options: [
