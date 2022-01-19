@@ -1,21 +1,25 @@
 <template>
   <div class="logoContainerDesktop" v-if="screenSize == 'desktop'">
-    <v-img
-      src="@/assets/images/whatsapp.png"
-      height="30px"
-      width="30px"
-      @click="goToWhatsapp"
-      class="logoDesktop"
-    ></v-img>
+    <a href="https://wa.me/50672527633">
+      <v-img
+        src="@/assets/images/whatsapp.png"
+        height="30px"
+        width="30px"
+        @click="goToWhatsapp"
+        class="logoDesktop"
+      ></v-img>
+    </a>
   </div>
   <div class="logoContainerMobile" v-else>
-    <v-img
-      src="@/assets/images/whatsapp.png"
-      height="22px"
-      width="22px"
-      @click="goToWhatsapp"
-      class="logoMobile"
-    ></v-img>
+    <a href="https://wa.me/50672527633">
+      <v-img
+        src="@/assets/images/whatsapp.png"
+        height="22px"
+        width="22px"
+        @click="goToWhatsapp"
+        class="logoMobile"
+      ></v-img>
+    </a>
   </div>
 </template>
 
@@ -59,9 +63,8 @@
   animation: pulse 0.8s infinite;
 }
 
-.logoMobile:hover{
-  transform: scale(1);
-  animation: pulse 0.8s infinite;
+.logoMobile:active{
+  transform: scale(0.7);
 }
 
 @keyframes pulse {

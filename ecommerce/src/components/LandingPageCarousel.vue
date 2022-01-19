@@ -19,7 +19,7 @@
     <div class="carouselInfoContainerDesktop">
       <h1 class="carouselTitleDesktop">{{carouselTitle}}</h1>
       <br>
-      <h1 class="carouselSubtitleDesktop">{{carouselSubtitle}}</h1>
+      <p class="carouselSubtitleDesktop">{{carouselSubtitle}}</p>
       <button class="carouselButtonDesktop carouselButtonActiveDesktop">{{carouselButtonTitle[0]}}</button>
       <button class="carouselButtonDesktop carouselButtonInactiveDesktop">{{carouselButtonTitle[1]}}</button>
     </div>
@@ -27,13 +27,13 @@
 
   <div style="position: relative;" v-else>
     <div class="carouselContainer">
-      <v-carousel :show-arrows="false" hide-delimiters height="650px" interval="6000" cycle>
+      <v-carousel :show-arrows="false" hide-delimiters height="550px" interval="6000" cycle>
         <v-carousel-item v-for="(carouselImage,i) in carouselImages" :key="i" :src="carouselImage.src" class="carouselImage">
         </v-carousel-item>
         <div class="carouselInfoContainerMobile">
           <h1 class="carouselTitleMobile">{{carouselTitle}}</h1>
           <br>
-          <h1 class="carouselSubtitleMobile">{{carouselSubtitle}}</h1>
+          <p class="carouselSubtitleMobile">{{carouselSubtitle}}</p>
           <div style="text-align: center;">
             <button class="carouselButtonMobile carouselButtonActiveMobile">{{carouselButtonTitle[0]}}</button>
             <button class="carouselButtonMobile carouselButtonInactiveMobile">{{carouselButtonTitle[1]}}</button>
@@ -117,7 +117,7 @@
   .carouselInfoContainerMobile{
     position: absolute;
     z-index: 1;
-    top:240px;
+    top: 190px;
     align-self: center;
   }
 
@@ -132,7 +132,7 @@
   .carouselSubtitleMobile{
     max-width: 80vw;
     text-align: center;
-    font-size: 2.5vw;
+    font-size: medium;
     color: rgb(255, 255, 255);
   }
 
@@ -141,7 +141,7 @@
     position: relative;
     top: 60px;
     font-size: 18px;
-    padding: 0.5vw 3vw;
+    padding: 3vw 6vw;
     align-self: center;
   }
 

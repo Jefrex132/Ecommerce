@@ -1,6 +1,15 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import LandingPage from '../views/LandingPage.vue'
+import About from '../views/About.vue'
+import Privacy from '../views/Privacy.vue'
+import Terms from '../views/Terms.vue'
+import Account from '../views/Account.vue'
+import LostPassword from '../views/LostPassword.vue'
+import Cart from '../views/Cart.vue'
+import Checkout from '../views/Checkout.vue'
+import Category from '../views/Category.vue'
+import Product from '../views/Product.vue'
 
 Vue.use(VueRouter)
 
@@ -13,27 +22,49 @@ const routes = [
   {
     path: '/about',
     name: 'About',
-    
-    component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
+    component: About
   },
-  /*
   {
-    path: '/producto/:codigo/:localidad',
+    path: '/privacy',
+    name: 'Privacy',
+    component: Privacy
+  },
+  {
+    path: '/terms',
+    name: 'Terms',
+    component: Terms
+  },
+  {
+    path: '/account',
+    name: 'Account',
+    component: Account
+  },
+  {
+    path: '/account/lostPassword',
+    name: 'LostPassword',
+    component: LostPassword
+  },
+  {
+    path: '/cart',
+    name: 'Cart',
+    component: Cart
+  },
+  {
+    path: '/checkout',
+    name: 'Checkout',
+    component: Checkout
+  },
+  {
+    path: '/category',
+    name: 'Category',
+    component: Category
+  },
+  {
+    path: '/product',
     name: 'Product',
-    component: Product,
-    meta: {
-      libre: true
-    }
-  },
-  {
-    path: '/categoria-producto/:type/:brandName',
-    name: '',
-    component: Product,
-    meta: {
-      libre: true
-    }
+    component: Product
   }
-  */
+  
   
 ]
 

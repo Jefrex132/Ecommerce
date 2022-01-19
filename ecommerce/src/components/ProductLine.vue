@@ -9,15 +9,17 @@
             <v-img height="230" width="230" :src="require('../assets/images/' + product.imageSource)" class="productImageDesktop"></v-img>
             <v-tooltip left color="black">
               <template v-slot:activator="{ on, attrs }">
-                <v-icon color="black" class="shoppingCartDesktop" v-bind="attrs" v-on="on">mdi-cart</v-icon>
+                <v-icon color="black" class="shoppingCartDesktop" v-bind="attrs" v-on="on" @click="addProductToCart(product, true)">mdi-cart</v-icon>
+                <v-snackbar right shaped top color="success" app v-model="cartNotification">Se ha agregado {{product.productName}} al carrito.</v-snackbar>
               </template>
               <span>Agregar al carrito</span>
             </v-tooltip>
+            
           </div>
-          <h2 class="brandNameDesktop">{{product.brandName}}</h2>
+          <h2 class="brandNameDesktop" style="font-weight: initial; margin-bottom: 5px;">{{product.brandName}}</h2>
           <h2 class="productNameDesktop">{{product.productName}}</h2>
           <v-rating background-color="warning" color="warning" hover length="5" size="15" class="ratingDesktop"></v-rating>
-          <h2 class="productPriceDesktop">{{product.productPrice}}</h2>
+          <h2 style="color: gray;" class="productPriceDesktop">{{product.productPrice}}</h2>
         </div>
       </template>
     </div>
@@ -31,12 +33,6 @@
         <div :key="product" class="productContainerMobile">
           <div class="imageContainerMobile">
             <v-img height="170" :src="require('../assets/images/' + product.imageSource)"></v-img>
-            <v-tooltip left color="black">
-              <template v-slot:activator="{ on, attrs }">
-                <v-icon color="black" class="shoppingCartMobile" v-bind="attrs" v-on="on">mdi-cart</v-icon>
-              </template>
-              <span>Agregar al carrito</span>
-            </v-tooltip>
             <h2 class="brandNameMobile">{{product.brandName}}</h2>
             <h2 class="productNameMobile">{{product.productName}}</h2>
             <v-rating background-color="warning" color="warning" hover length="5" size="8" class="ratingMobile"></v-rating>
@@ -44,7 +40,6 @@
           </div>
         </div>
       </template>
-
     </div>
   </div>
 
@@ -52,6 +47,9 @@
 
 
 <style>
+  .v-dialog{
+    border: initial;
+  }
 
 /* DESKTOP VIEW */ 
 .productLineContainerDesktop {
@@ -131,6 +129,7 @@
     color: black;
     font-size: 15px;
     overflow-y: hidden;
+    cursor: pointer;
 }
 
 .ratingDesktop{
@@ -230,6 +229,11 @@
 
 <script>
 export default {
+  /* MODELS */
+  cartNotification: false, 
+
+
+  
   name: "ProductLine",
 
   data: () => ({
@@ -239,7 +243,7 @@ export default {
         brandName: "MIO",
         productName: "MIO Max Icy Menthol",
         productPrice: "₡9,995.00",
-        imageSource: "productPlaceholder.jpg",
+        imageSource: "productPlaceholder.jpg"
       },
       {
         brandName: "PuffBar",
@@ -262,7 +266,20 @@ export default {
     ],
   }),
 
-  methods: {},
+  methods: {
+    addProductToCart(product, state){
+      if(state){
+        this.cartNotification = true;
+        console.log(product);
+
+      }
+      else{
+        this.cartNotification = false;
+
+      }
+
+    }
+  },
 
   computed: {
     screenSize() {

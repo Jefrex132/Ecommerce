@@ -22,14 +22,15 @@
   }
 
   .messageCarouselLabelDesktop{
-    color: rgb(0, 197, 33);
+    color: rgb(255, 255, 255);
     align-self: center;
     position: relative;
   }
 
   .messageCarouselLabelMobile{
-    color: rgb(0, 197, 33); 
-    font-size: 2vw;
+    color: rgb(255, 255, 255); 
+    font-size: small;
+    align-self: center;
   }
   
 </style>

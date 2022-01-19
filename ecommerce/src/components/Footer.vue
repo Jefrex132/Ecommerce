@@ -5,19 +5,29 @@
       <div class="footerContentDesktop">
         <label class="footerLabelDesktop" @click="test">eGift Cards</label>
         <label class="footerLabelDividerDesktop"> | </label> 
-        <label class="footerLabelDesktop" @click="test">Cuenta</label>
+        <label class="footerLabelDesktop" @click="goToAccount">Cuenta</label>
         <label class="footerLabelDividerDesktop"> | </label> 
         <label class="footerLabelDesktop" @click="goToAbout">Sobre Nosotros</label>
         <br><br>
-        <label class="footerLabelDesktop" @click="test">Términos</label>
+        <label class="footerLabelDesktop" @click="goToTerms">Términos</label>
         <label class="footerLabelDividerDesktop"> | </label>
-        <label class="footerLabelDesktop" @click="test">Privacidad</label>
+        <label class="footerLabelDesktop" @click="goToPrivacy">Privacidad</label>
       </div>
       <div class="footerContentDesktop">
-        <v-icon class="footerIconDesktop" style="left:82%;">mdi-facebook</v-icon>
-        <v-icon class="footerIconDesktop">mdi-instagram</v-icon>
-        <br><br>
-        <label class="footerLabelDesktop" style="left:32%; color:blue" @click="test">© 2021 King Vape CR | Noah Systems</label>
+        <div style="text-align: right;">
+          <a href="https://www.facebook.com/King-Vape-CR-2398538153758930/">
+            <v-icon class="footerIconDesktop">mdi-facebook</v-icon>
+          </a>
+          <a href="https://www.instagram.com/kingvape_costarica/">
+            <v-icon class="footerIconDesktop">mdi-instagram</v-icon>
+          </a>
+        </div>
+        <br>
+        <div style="text-align: right;">
+          <a href="https://www.noah.cr/">
+            <label class="footerLabelDesktop" style="color:blue" @click="test">© 2021 King Vape CR | Noah Systems</label>
+          </a>
+        </div>
       </div>
     </div>
     <div style="height:100px"></div>
@@ -28,18 +38,24 @@
       <hr><br>
       <label class="footerLabelMobile" @click="test">eGift Cards</label>
       <label class="footerLabelDividerMobile"> | </label> 
-      <label class="footerLabelMobile" @click="test">Cuenta</label>
+      <label class="footerLabelMobile" @click="goToAccount">Cuenta</label>
       <label class="footerLabelDividerMobile"> | </label> 
-      <label class="footerLabelMobile" @click="test">Sobre Nosotros</label>
+      <label class="footerLabelMobile" @click="goToAbout">Sobre Nosotros</label>
       <br><br>
-      <v-icon class="footerIconMobile">mdi-facebook</v-icon>
-      <v-icon class="footerIconMobile">mdi-instagram</v-icon>
+      <a href="https://www.facebook.com/King-Vape-CR-2398538153758930/">
+        <v-icon class="footerIconMobile">mdi-facebook</v-icon>
+      </a>
+      <a href="https://www.instagram.com/kingvape_costarica/">
+        <v-icon class="footerIconMobile">mdi-instagram</v-icon>
+      </a>
       <br><br>
-      <label class="footerLabelMobile" @click="test">Términos</label>
+      <label class="footerLabelMobile" @click="goToTerms">Términos</label>
       <label class="footerLabelDividerMobile"> | </label>
-      <label class="footerLabelMobile" @click="test">Privacidad</label>
+      <label class="footerLabelMobile" @click="goToPrivacy">Privacidad</label>
       <br><br>
-      <label class="footerLabelMobile" style="color:blue;" @click="test">© 2021 King Vape CR | Noah Systems</label>
+      <a href="https://www.noah.cr/">
+        <label class="footerLabelMobile" style="color:blue;" @click="test">© 2021 King Vape CR | Noah Systems</label>
+      </a>
       <div style="height:50px"></div>
     </div>
   </div>
@@ -77,8 +93,8 @@
 
 .footerIconDesktop{
   position: relative;
-  left: 85%;
   cursor: pointer;
+  margin-left: 10px;
 }
 
 /* MOBILE VIEW */
@@ -104,6 +120,9 @@
   margin-right: 1vw;
 }
 
+a:-webkit-any-link{
+  text-decoration:none !important;
+}
 </style>
 
 <script>
@@ -118,6 +137,15 @@ export default {
   methods: {
     goToAbout(){
       router.push('/about')
+    },
+    goToPrivacy(){
+      router.push('/privacy')
+    },
+    goToTerms(){
+      router.push('/terms')
+    },
+    goToAccount(){
+      router.push('/account')
     }
   },
 

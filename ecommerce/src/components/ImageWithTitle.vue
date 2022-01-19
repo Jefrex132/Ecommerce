@@ -1,15 +1,30 @@
-<template>   
+<template> 
+  <div>  
+
     <div v-if="screenSize=='desktop'">
-        <div class="imageWithTitleContainerDesktop">
-            <v-img
-            height="500px"
-            :src="require('../assets/images/placeholder.jpg')"
-            class="imageWithTitleDesktop"
-            >
-            <h1 class="imageTitleDesktop">{{ title }}</h1>
-            </v-img>
-        </div>
+      <div class="imageWithTitleContainerDesktop">
+        <v-img
+        height="500px"
+        :src="require('../assets/images/placeholder.jpg')"
+        class="imageWithTitleDesktop"
+        >
+        <h1 class="imageTitleDesktop">{{ title }}</h1>
+        </v-img>
+      </div>
     </div>
+
+    <div v-else>
+      <div class="imageWithTitleContainerMobile">
+        <v-img
+        :src="require('../assets/images/placeholder.jpg')"
+        class="imageWithTitleMobile"
+        >
+        <h1 class="imageTitleMobile">{{ title }}</h1>
+        </v-img>
+      </div>
+    </div>
+
+  </div>
 </template>
 
 <style>
@@ -28,6 +43,31 @@
 .imageTitleDesktop {
   opacity: 1;
   font-size: 50px;
+  color: rgb(255, 255, 255);
+  position: relative;
+  font-family: titleFont;
+  animation: showTitle 1s;
+}
+
+/* MOBILE VIEW */
+
+.imageWithTitleContainerMobile{
+  width: 90vw;
+  margin: 1vw auto;
+}
+
+.imageWithTitleMobile{
+  width: 90vw;
+  height: 350px;
+  text-align: center;
+  display:flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.imageTitleMobile{
+  opacity: 1;
+  font-size: 9vw;
   color: rgb(255, 255, 255);
   position: relative;
   font-family: titleFont;

@@ -6,11 +6,11 @@
     <div>
       <Navbar/>
       <ImageWithTitle/>
+      <br><br>
       <template v-for="paragraph in paragraphs">
         <br :key="paragraph">
-        <br :key="paragraph">
         <div class="aboutLabelContainer" :key="paragraph">
-          <label class="aboutLabel">{{paragraph.content}}</label>
+          <p class="aboutLabel">{{paragraph.content}}</p>
         </div>
       </template>
       <br><br>
@@ -19,12 +19,12 @@
       </div>
       <br>
       <div class="aboutLabelContainer" style="text-align: center;">
-        <label class="aboutLabel">Lunes a Domingo de 10:00 AM a 7:00 PM</label>
+        <p class="aboutLabel">Lunes a Domingo de 10:00 AM a 7:00 PM</p>
       </div>
       <br>
-      <GmapMap :center="{lat:9.919795227945034, lng:-84.05193467818081}" :zoom="17" style="width: 500px; height: 300px; margin:0 auto;">
-      <GmapMarker :position="{lat:9.919795227945034, lng:-84.05193467818081}"/>
-      </GmapMap>
+      <div style="text-align: center;">
+        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3930.170016823454!2d-84.05411718525843!3d9.919794392906208!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8fa0e3b54f76f97f%3A0xbae41feddaefbf91!2sKing%20Vape%20CR!5e0!3m2!1ses-419!2scr!4v1640707618467!5m2!1ses-419!2scr" class="aboutMap" allowfullscreen="" loading="lazy"></iframe>
+      </div>
       <br><br>
       <Footer/>
     </div>
@@ -36,7 +36,7 @@
 .aboutLabelContainer {
   position: relative;
   margin: 0 auto;
-  max-width: 72vw;
+  max-width: 80vw;
   text-align: justify;
 }
 
@@ -47,8 +47,13 @@
 .aboutTitleLabel {
   text-align: center;
   position: relative;
-  font-size: 30px;
+  font-size: 3vw;
   font-family: titleFont;
+}
+
+.aboutMap {
+  width: 60vw; 
+  height: 300px; 
 }
 
 @font-face {

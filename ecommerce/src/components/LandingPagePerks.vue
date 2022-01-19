@@ -4,7 +4,7 @@
         <div :key="perk" class="perkContainerDesktop">
           <v-icon size="50" color="black">mdi-{{perk.icon}}</v-icon>
           <h1 class="perkTitleDesktop">{{perk.title}}</h1>
-          <h1 class="perkMessageDesktop">{{perk.message}}</h1>
+          <p class="perkMessageDesktop">{{perk.message}}</p>
         </div>
     </template>
   </div>
@@ -13,7 +13,7 @@
       <div :key="perk" class="perkContainerMobile">
         <v-icon size="5vw" color="black">mdi-{{perk.icon}}</v-icon>
         <h1 class="perkTitleMobile">{{perk.title}}</h1>
-        <h1 class="perkMessageMobile">{{perk.message}}</h1>
+        <p class="perkMessageMobile">{{perk.message}}</p>
         <br>
       </div>
     </template>

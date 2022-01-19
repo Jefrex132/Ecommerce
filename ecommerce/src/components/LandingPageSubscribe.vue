@@ -10,7 +10,7 @@
         <div class="labelContainerDesktop">
           <h1 class="titleLabelDesktop">{{ title }}</h1>
           <br />
-          <h1 class="messageLabelDesktop">{{ message }}</h1>
+          <p class="messageLabelDesktop">{{ message }}</p>
           <br />
           <v-form v-model="valid">
             <v-text-field
@@ -19,6 +19,7 @@
               label="Nombre*"
               required
               dark
+              outlined
             ></v-text-field>
             <v-text-field
               v-model="email"
@@ -26,6 +27,7 @@
               label="Correo Electrónico*"
               required
               dark
+              outlined
             ></v-text-field>
             <br />
             <button class="buttonDesktop">UNIRME</button>
@@ -46,7 +48,7 @@
         <br />
         <h1 class="titleLabelMobile">{{ title }}</h1>
         <br />
-        <h1 class="messageLabelMobile">{{ message }}</h1>
+        <p class="messageLabelMobile">{{ message }}</p>
         <br />
         <br />
         <v-form v-model="valid">
@@ -55,6 +57,7 @@
             style="width: 60vw; margin:0 auto;"
             label="Nombre*"
             required
+            outlined
             dark
           ></v-text-field>
           <v-text-field
@@ -62,6 +65,7 @@
             style="width: 60vw; margin:0 auto;"
             label="Correo Electrónico*"
             required
+            outlined
             dark
           ></v-text-field>
           <br />
