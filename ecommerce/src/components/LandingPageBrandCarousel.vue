@@ -1,26 +1,13 @@
 <template>
-    <div>
-        <v-carousel style="width:1000px; height:170px; top:50px; margin:auto;" hide-delimiters> 
-            <template v-for="(item, index) in brands"> 
-                <v-carousel-item v-if="(index + 1) % columns === 1 || columns === 1" :key="index"> 
-                    <v-row class="flex-nowrap" style="height:100%"> 
-                        <template v-for="(n,i) in columns"> 
-                            <template v-if="(+index + i) < brands.length"> 
-                                <v-col :key="i"> 
-                                    <v-sheet v-if="(+index + i) < brands.length" height="130px">
-                                        <v-row class="fill-height" align="center" justify="center">
-                                            <v-img src="@/assets/images/whatsapp.png" height="60px" width="60px"></v-img>
-                                        </v-row>
-                                    </v-sheet>
-                                </v-col> 
-                            </template> 
-                        </template> 
-                    </v-row> 
-                </v-carousel-item> 
-            </template> 
-        </v-carousel>
-    </div>
+    <swiper class="swiper" :options="swiperOption" style="height: 200px; max-width: 1100px; margin: 0 auto;">
+        <template v-for="brand in brands">
+            <swiper-slide :key="brand">
+                <v-img :src="brand.imageSource"></v-img>
+            </swiper-slide>
+        </template>
+    </swiper>
 </template>
+
 
 <style>
     .navbarImage{
@@ -30,30 +17,35 @@
     }
 </style>
 
+
 <script>
+//import { Swiper, SwiperSlide } from 'vue-awesome-swiper'
+import 'swiper/swiper-bundle.css'
 
     export default {
         name: 'LandingPage',
 
-        data: () => ({
-            brands: [
-                "red", 
-                "green", 
-                "orange", 
-                "blue", 
-                "pink", 
-                "purple", 
-                "indigo", 
-                "cyan", 
-                "deep-purple", 
-                "light-green", 
-                "deep-orange", 
-                "blue-grey"
-            ]
-        }),
-
-        computed: {
-            columns() {return 5}
+        created(){
+            const url = 'http://pruebas.noah.cr/Backend/api/Carrusel/SelectBrands/King%20Vape/1'
+            this.$http.get(url).then((result) => {
+                for(var brand in result.data){
+                    this.brands.push({imageSource: result.data[brand].foto})
+                }
+            })
         },
+        
+
+        data: () => ({
+            swiperOption: {
+                slidesPerView: 7,
+                spaceBetween: 20,
+                pagination: {
+                    el: '.swiper-pagination',
+                    clickable: true
+                }
+            },
+
+            brands: []
+        })
     }
 </script>

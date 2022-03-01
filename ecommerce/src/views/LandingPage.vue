@@ -8,6 +8,8 @@
       <Navbar />
       <LandingPageCarousel />
       <LandingPageCarouselMessage />
+      <br><br>
+      <LandingPageBrandCarousel />
       <LandingPageCard />
       <br>
       <ProductLine />
@@ -40,6 +42,7 @@
 import Navbar from "../components/Navbar.vue";
 import LandingPageCarousel from "../components/LandingPageCarousel.vue";
 import LandingPageCarouselMessage from "../components/LandingPageCarouselMessage.vue";
+import LandingPageBrandCarousel from "../components/LandingPageBrandCarousel.vue";
 import WhatsappLogo from "../components/WhatsappLogo.vue";
 import LandingPageCard from "../components/LandingPageCard.vue";
 import ProductLine from "../components/ProductLine.vue";
@@ -55,6 +58,7 @@ export default {
     Navbar,
     LandingPageCarousel,
     LandingPageCarouselMessage,
+    LandingPageBrandCarousel,
     WhatsappLogo,
     LandingPageCard,
     ProductLine,

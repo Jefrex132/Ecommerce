@@ -1,4 +1,6 @@
 <template>
+
+
   <div v-if="screenSize == 'desktop'">
     <h1 class="productLineTitleDesktop">{{ title }}</h1>
     <hr class="productLineLineDesktop" />
@@ -6,7 +8,7 @@
       <template v-for="product in products">
         <div :key="product" class="productContainerDesktop">
           <div class="imageContainerDesktop">
-            <v-img height="230" width="230" :src="require('../assets/images/' + product.imageSource)" class="productImageDesktop"></v-img>
+            <v-img height="230" width="230" :src="require('../assets/images/' + product.imageSource)" class="productImageDesktop" @click="openProduct(product.id)"></v-img>
             <v-tooltip left color="black">
               <template v-slot:activator="{ on, attrs }">
                 <v-icon color="black" class="shoppingCartDesktop" v-bind="attrs" v-on="on" @click="addProductToCart(product, true)">mdi-cart</v-icon>
@@ -17,13 +19,14 @@
             
           </div>
           <h2 class="brandNameDesktop" style="font-weight: initial; margin-bottom: 5px;">{{product.brandName}}</h2>
-          <h2 class="productNameDesktop">{{product.productName}}</h2>
+          <h2 class="productNameDesktop" @click="openProduct(product.id)">{{product.productName}}</h2>
           <v-rating background-color="warning" color="warning" hover length="5" size="15" class="ratingDesktop"></v-rating>
-          <h2 style="color: gray;" class="productPriceDesktop">{{product.productPrice}}</h2>
+          <h2 style="color: gray;" class="productPriceDesktop">₡{{product.productPrice}}</h2>
         </div>
       </template>
     </div>
   </div>
+
 
   <div v-else>
     <h1 class="productLineTitleMobile">{{ title }}</h1>
@@ -36,7 +39,7 @@
             <h2 class="brandNameMobile">{{product.brandName}}</h2>
             <h2 class="productNameMobile">{{product.productName}}</h2>
             <v-rating background-color="warning" color="warning" hover length="5" size="8" class="ratingMobile"></v-rating>
-            <h2 class="productPriceMobile">{{product.productPrice}}</h2>
+            <h2 class="productPriceMobile">₡{{product.productPrice}}</h2>
           </div>
         </div>
       </template>
@@ -228,6 +231,7 @@
 
 
 <script>
+//import router from '../router';
 export default {
   /* MODELS */
   cartNotification: false, 
@@ -238,47 +242,41 @@ export default {
 
   data: () => ({
     title: "PUFFS",
-    products: [
-      {
-        brandName: "MIO",
-        productName: "MIO Max Icy Menthol",
-        productPrice: "₡9,995.00",
-        imageSource: "productPlaceholder.jpg"
-      },
-      {
-        brandName: "PuffBar",
-        productName: "Puff Bar XXL Strawberry Kiwi",
-        productPrice: "₡18,000.00",
-        imageSource: "productPlaceholder.jpg",
-      },
-      {
-        brandName: "PuffBar",
-        productName: "Puff Bar XXL Pomegranate Ice",
-        productPrice: "₡18,000.00",
-        imageSource: "productPlaceholder.jpg",
-      },
-      {
-        brandName: "PuffBar",
-        productName: "Puff Bar XXL Melon Ice",
-        productPrice: "₡18,000.00",
-        imageSource: "productPlaceholder.jpg",
-      },
-    ],
+    products: [],
   }),
 
   methods: {
     addProductToCart(product, state){
       if(state){
         this.cartNotification = true;
-        console.log(product);
-
       }
       else{
         this.cartNotification = false;
-
       }
+    },
 
-    }
+    openProduct(id){
+      let localidad = 'King Vape';
+      var productURL = location.origin + '/product/' + id + '/' + localidad;
+      location.assign(productURL);
+    },
+
+  },
+
+  created(){
+    const url = 'http://pruebas.noah.cr/Backend/api/Top4Vistatemporada/SelectTop4Temporada/King%20Vape'
+    this.$http.get(url).then((result) => {
+      for(var product in result.data){
+        this.products.push(
+          {
+          id:result.data[product].codigo,
+          brandName:result.data[product].marca, 
+          productName:result.data[product].descripcion, 
+          productPrice:result.data[product].precioVenta,
+          imageSource: "productPlaceholder.jpg"
+          })
+      }
+    })
   },
 
   computed: {

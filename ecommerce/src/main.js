@@ -3,9 +3,12 @@ import App from './App.vue'
 import router from './router'
 import vuetify from './plugins/vuetify'
 
-import * as VueGoogleMaps from 'vue2-google-maps'
+import VueAwesomeSwiper from 'vue-awesome-swiper'
+
+import axios from 'axios'
 
 Vue.config.productionTip = false
+Vue.prototype.$http = axios
 
 new Vue({
   router,
@@ -13,9 +16,4 @@ new Vue({
   render: h => h(App)
 }).$mount('#app')
 
-Vue.use(VueGoogleMaps, {
-  load: {
-    key: 'AIzaSyCwemqbrgm2YsM3yFatnmlw9P3txd5DPTo',
-    libraries: 'places'
-  }
-})
+Vue.use(VueAwesomeSwiper, /* { default options with global component } */)

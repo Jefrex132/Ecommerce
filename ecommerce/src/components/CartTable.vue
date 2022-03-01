@@ -12,40 +12,36 @@
     <div v-else>
       <br><br>
       <div class="cartTableContainerDesktop">
-        <div class="cartIconsContainerDesktop">
-            <v-icon size="20" :key="product" style="opacity: 0;">mdi-delete</v-icon>
-            <v-icon size="20" :key="product" style="opacity: 0;">mdi-delete</v-icon>
-            <v-icon size="20" :key="product" style="opacity: 0;">mdi-delete</v-icon>
-            <v-icon size="20" :key="product" style="opacity: 0;">mdi-delete</v-icon>
-          <template v-for="product in products">
-            <v-tooltip left color="gray" :key="product">
-              <template v-slot:activator="{ on, attrs }">
-                <v-icon size="20" class="cartIconDesktop" v-bind="attrs" v-on="on">mdi-link</v-icon>
-              </template>
-              <span>Ir al producto</span>
-            </v-tooltip>
-              <v-tooltip left color="gray" :key="product">
-              <template v-slot:activator="{ on, attrs }">
-                <v-icon size="20" class="cartIconDesktop" v-bind="attrs" v-on="on">mdi-minus</v-icon>
-              </template>
-              <span>Reducir cantidad</span>
-            </v-tooltip>
-            <v-tooltip left color="gray" :key="product">
-              <template v-slot:activator="{ on, attrs }">
-                <v-icon size="20" class="cartIconDesktop" v-bind="attrs" v-on="on">mdi-plus</v-icon>
-              </template>
-              <span>Aumentar cantidad</span>
-            </v-tooltip>
-            <v-tooltip left color="gray" :key="product">
-              <template v-slot:activator="{ on, attrs }">
-                <v-icon size="20" class="cartIconDesktop" v-bind="attrs" v-on="on">mdi-delete</v-icon>
-              </template>
-              <span>Eliminar producto</span>
-            </v-tooltip>
-          </template>   
-        </div>
-        <v-data-table :headers="headers" :items="products" hide-default-footer class="cartTableDesktop">        
+        
+        <v-data-table
+          :headers="headers"
+          :items="products"
+          hide-default-footer
+          :items-per-page="10000"
+          class="cartTableDesktop">
+
+          <template v-slot:item.actionImage="{ item }">
+            <v-img :src="item.productImage" width="100"></v-img>
+          </template>
+          
+          <template class="primary" v-slot:item.productAmount="{ item }"> 
+            <v-text-field 
+              single-line 
+              outlined 
+              dense 
+              type="number"
+              min="1"
+              readonly
+              prepend-icon="mdi-minus" @click:prepend="reducirCantidadProducto(item)"
+              append-outer-icon="mdi-plus" @click:append-outer="aumentarCantidadProducto(item)"
+              :value="item.productAmount" 
+              v-model="item.productAmount"
+              style="position: relative; top: 20%;">
+            </v-text-field>
+          </template>
+
         </v-data-table>
+        
         <div class="cartIconsContainerDesktop"></div>
         <div class="cupponCartContainerDesktop">
           <v-text-field label="Código de cupón" outlined dense class="cupponInputDesktop"></v-text-field>
@@ -143,7 +139,7 @@
               <label class="cartPayLabelMobile" style="font-weight: bold;">Precio:</label>
             </div>
             <div style="text-align: right; margin:10px;">
-              <label class="cartPayLabelMobile" style="width: 80vw; margin: 0px;">{{product.productPrice}}</label>
+              <label class="cartPayLabelMobile" style="width: 80vw; margin: 0px;">₡{{product.productPrice}}</label>
             </div>
           </div>
           <hr>
@@ -165,7 +161,7 @@
               <label class="cartPayLabelMobile" style="font-weight: bold;">Subtotal:</label>
             </div>
             <div style="text-align: right; margin: 10px;">
-              <label class="cartPayLabelMobile" style="font-weight: bold;">{{product.productSubtotal}}</label>
+              <label class="cartPayLabelMobile" style="font-weight: bold;">₡{{product.productSubtotal}}</label>
             </div>
           </div>
         </div>
@@ -426,6 +422,12 @@ export default {
   data: () => ({
     headers: [
       {
+        text: 'Imagen',
+        align: 'start',
+        sortable: false,
+        value: 'actionImage'
+      },
+      {
         text: 'Producto',
         align: 'start',
         sortable: false,
@@ -450,39 +452,51 @@ export default {
         value: 'productSubtotal'
       }
     ],
-    products:
-    [
-      {
-        productImage: 'productPlaceholder.jpg',
-        productName: 'Wes Coil Alien Clapton 0.12 Dual',
-        productPrice: '₡3,000.00',
-        productAmount: '3',
-        productSubtotal: '₡3,000.00'
-      },
-      {
-        productImage: 'productPlaceholder.jpg',
-        productName: 'Wes Coil Alien Clapton 0.12 Dual',
-        productPrice: '₡3,000.00',
-        productAmount: '3',
-        productSubtotal: '₡3,000.00'
-      },
-      {
-        productImage: 'productPlaceholder.jpg',
-        productName: 'Wes Coil Alien Clapton 0.12 Dual',
-        productPrice: '₡3,000.00',
-        productAmount: '3',
-        productSubtotal: '₡3,000.00'
-      }
-    ],
+   
+    products: [],
 
-    subtotal: '₡3,000.00',
-    total: '₡3,000.00',
+    subtotal: 0,
+    total: 0,
+
+    clientID: 156
   }),
 
   methods: {
     goToCheckout(){
       router.push('/checkout');
-    }
+    },
+
+    reducirCantidadProducto(product){
+      if (product.productAmount > 1){
+        product.productAmount = product.productAmount-1;
+        product.productSubtotal = product.productAmount*product.productPrice
+      }
+    },
+
+    aumentarCantidadProducto(product){
+      product.productAmount = product.productAmount+1;
+      product.productSubtotal = product.productAmount*product.productPrice
+      
+    },
+
+  },
+
+  created(){
+    const url = 'http://pruebas.noah.cr/Backend/api/Carritos/ObtenerProductos/King%20Vape/' + this.clientID
+    this.$http.get(url).then((result) => {
+      for(var product in result.data){
+        this.products.push({ 
+          productID:result.data[product].id,
+          productName:result.data[product].nombre, 
+          productPrice:result.data[product].precioVenta, 
+          productAmount:result.data[product].cantidad,
+          productImage:result.data[product].foto,
+          productSubtotal:(result.data[product].cantidad*result.data[product].precioVenta)
+          })
+      }
+    })
+
+    console.log(this.products)
   },
 
   computed: {
@@ -502,4 +516,5 @@ export default {
     }
   },
 };
+
 </script>

@@ -18,7 +18,7 @@
             <br>
             <p style="white-space: pre-line;">{{mainInfo}}</p>
             <br>
-            <p style="font-size: x-large; font-weight: bold; color: gray; ">{{productPrice}}</p>
+            <p style="font-size: x-large; font-weight: bold; color: gray; ">₡{{productPrice}}</p>
 
             <div v-if="nicotinLevels">
               <p style="font-size: large; font-weight: bold; color: gray; ">Nicotina</p>
@@ -41,7 +41,7 @@
                 <br>
               </div>
               <p>SKU: {{SKU}}</p>
-              <p>Categoría: {{productCategory}}</p>
+              <p>Categoría: {{availableProductAmount}}</p>
             </div>
             <div v-else>
               <label>Disponibilidad: </label>
@@ -263,14 +263,8 @@ export default {
     /* MODELS */
     cartNotification: false,
 
-
-    productName: 'Humble Berry Blow Doe Ice 120ML',
-
-    mainInfo: `Acerca de AIMIDI Cube Mini + Ai100W TC Box MOD
-
-AIMIDI es conocido por sus productos de vapeo de alta gama, cada uno diseñado para verse tan bien como funciona. Se dedican a proporcionar a sus clientes solo lo mejor de lo mejor y constantemente renuevan su línea para incluir vapeadores que son mejores que los anteriores. Esta compañía es mejor conocida por sus potentes modificaciones de la serie Curve, que estamos orgullosos de ofrecer. Junto con ellos, también ofrecemos una variedad de otras modificaciones AIMIDI a precios asequibles.
-
-Obtenga un vaporizador que sea tan único y estéticamente agradable como poderoso de usar con este AIMIDI Cube. Llamado así por su apariencia única, el cubo AIMIDI presenta diseños en forma de cubo cortados en su cuerpo rectangular. Un botón de disparo de gran tamaño permite un fácil acceso. Hay dos botones que le permiten cambiar la configuración y una pantalla que le permite ver lo que ha cambiado. El AMIDI Cube funciona con tres baterías 18650 que proporcionan a este vaporizador su inmensa potencia.`,
+    productName: '',
+    mainInfo: '',
 
     extraInfo: `introducción del producto
 
@@ -296,10 +290,10 @@ AIMIDI Cube Mini + Ai100W TC Box MOD contiene
 Embalaje simple Embalaje habitual de fábrica, el embalaje está sujeto a cambios sin previo aviso.`,
 
 
-    productPrice: '₡16,995.00',
+    productPrice: 0,
     nicotinLevels: ['Elige una opción','0MG','3MG','6MG'],
 
-    availableProductAmount: 25,
+    availableProductAmount: 0,
     productAmount: 1,
     SKU: 'HUMBLE-BERRY-BLOW-DOE-ICE',
 
@@ -364,6 +358,21 @@ Solo los usuarios registrados que hayan comprado este producto pueden hacer una 
         return "desktop";
       }
     },
+  },
+
+  created(){
+    let url = 'http://pruebas.noah.cr/Backend/api/Productos/MostrarFichaProducto/' + this.$route.params.id + '/King%20Vape'
+    this.$http.get(url).then((result) => {
+      this.productName = result.data.descripcion
+      this.mainInfo = result.data.subFamilia
+      this.productPrice = result.data.precioVenta
+      this.productCategory = result.data.categoria
+    })
+    
+    url = 'http://pruebas.noah.cr/Backend/api/ProductosWebs/ConsultaStock/' + this.$route.params.id + '/King%20Vape'
+    this.$http.get(url).then((result) => {
+      this.availableProductAmount = result.data.stock;
+    })
   },
 
   methods: {

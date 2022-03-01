@@ -59,11 +59,12 @@ const routes = [
     name: 'Category',
     component: Category
   },
+
   {
-    path: '/product',
+    path: '/product/:id/:localidad',
     name: 'Product',
     component: Product
-  }
+  },
   
   
 ]
