@@ -8,7 +8,7 @@
       </div>
       <br><br>
     </div>
-
+	
     <div v-else>
       <br><br>
       <div class="cartTableContainerDesktop">
@@ -19,11 +19,23 @@
           hide-default-footer
           :items-per-page="10000"
           class="cartTableDesktop">
-
-          <template v-slot:item.actionImage="{ item }">
-            <v-img :src="item.productImage" width="100"></v-img>
-          </template>
-          
+		<template v-slot:item.actionDelete="{ item }">
+			<v-btn
+				class="mx-2"
+				icon
+				dark
+				small
+				@click="BorrarLinea(item.productID,item.productName)"
+				color="grey"
+				>
+				<v-icon dark>
+					mdi-delete
+				</v-icon>
+			</v-btn>
+		</template>
+		<template v-slot:item.actionImage="{ item }">
+			<v-img :src="item.productImage" width="100"></v-img>
+		</template>
           <template class="primary" v-slot:item.productAmount="{ item }"> 
             <v-text-field 
               single-line 
@@ -61,28 +73,33 @@
                 <h1 class="cartPayLabelDesktop" style="left: 20px; width: 200px; font-weight: bold;">Subtotal</h1>
               </div>
               <div style="text-align: right;">
-                <h1 class="cartPayLabelDesktop">{{subtotal}}</h1>
+                <h1 class="cartPayLabelDesktop">{{calcularSubTotal}}</h1>
               </div>
             </div>
             <hr class="cartPayLineDesktop" noshade style="width: 555px; margin: 0 auto; position: relative;">
             <div style="display: grid; grid-template-columns: auto auto;">
               <div style="text-align: left;">
-                <h1 class="cartPayLabelDesktop" style="left: 20px; width: 200px; font-weight: bold;">Total</h1>
+                <h1 class="cartPayLabelDesktop" style="left: 20px; width: 200px; font-weight: bold;">Envio</h1>
               </div>
               <div style="text-align: right; margin: 10px;">
                 <div>
-                  <div>
-                    <input name="sendInfo" type="radio" id="sendByMail" value="0" style="margin: 10px;">
-                    <label for="sendByMail" class="cartPayRadioDesktop">Correos de Costa Rica: ₡3,500.00</label>
-                  </div> 
-                  <div>
-                    <input name="sendInfo" type="radio" id="sendFree" value="1" style="margin: 10px;">
-                    <label for="sendFree" class="cartPayRadioDesktop">Envío Gratuito</label>
-                  </div> 
-                  <div>
-                    <input name="sendInfo" type="radio" id="pickInStore" value="2" style="margin: 10px;">
-                    <label for="pickInStore" class="cartPayRadioDesktop">Retirar en King Vape Plaza Zapote Centro Comercial</label>
-                  </div> 
+					<v-radio-group v-model="radios">
+					<v-radio value=0>
+						<template v-slot:label>
+						<div>Envío Gratuito</div>
+						</template>
+					</v-radio>
+					<v-radio value=3500>
+						<template v-slot:label>
+						<div>Correos de Costa Rica:<strong class="success--text">₡3,500.00</strong></div>
+						</template>
+					</v-radio>
+					<v-radio value=0>
+						<template v-slot:label>
+						<div>Retirar en King Vape Plaza Zapote <strong class="primary--text">Duckduckgo</strong></div>
+						</template>
+					</v-radio>
+					</v-radio-group> 
                 </div>
               </div>
               
@@ -93,7 +110,7 @@
                 <h1 class="cartPayLabelDesktop" style="left: 20px; width: 200px; font-weight: bold;">Total</h1>
               </div>
               <div style="text-align: right;">
-                <h1 class="cartPayLabelDesktop">{{total}}</h1>
+                <h1 class="cartPayLabelDesktop">{{calcularTotal}}</h1>
               </div>
             </div>
             <hr class="cartPayLineDesktop" noshade style="width: 555px; margin: 0 auto; position: relative;">
@@ -188,7 +205,7 @@
             <label class="cartPayLabelMobile" style="font-weight: bold;">Subtotal:</label>
           </div>
           <div style="text-align: right; margin: 10px;">
-            <label class="cartPayLabelMobile">{{subtotal}}</label>
+            <label class="cartPayLabelMobile">{{calcularSubTotal}}</label>
           </div>
         </div>
         <hr style="width: 80vw; margin: 0 auto;">
@@ -231,6 +248,26 @@
       </div>
       <br>
     </div>
+	<template>
+		<div class="text-center ma-2">
+			<v-snackbar
+			v-model="cartNotification"
+			>
+			{{ Mensaje }}
+
+			<template v-slot:action="{ attrs }">
+				<v-btn
+				color="pink"
+				text
+				v-bind="attrs"
+				@click="cartNotification = false"
+				>
+				Close
+				</v-btn>
+			</template>
+			</v-snackbar>
+		</div>
+	</template>
   </div>
 
 </template>
@@ -414,6 +451,7 @@ tr{
 
 <script>
 import router from '../router/index';
+import axios from 'axios';
 
 export default {
   name: "CartTable",
@@ -421,6 +459,12 @@ export default {
 
   data: () => ({
     headers: [
+		{
+        text: 'Borrar',
+        align: 'start',
+        sortable: false,
+        value: 'actionDelete'
+      },
       {
         text: 'Imagen',
         align: 'start',
@@ -454,11 +498,12 @@ export default {
     ],
    
     products: [],
-
     subtotal: 0,
     total: 0,
-
-    clientID: 156
+	Mensaje:"",
+	cartNotification: true,
+    clientID: 156,
+	radios: 0,
   }),
 
   methods: {
@@ -470,33 +515,66 @@ export default {
       if (product.productAmount > 1){
         product.productAmount = product.productAmount-1;
         product.productSubtotal = product.productAmount*product.productPrice
+		let header={"Authorization" : "Bearer "};
+        let configuracion= {headers : header};
+        axios.put('api/Carritos/ActualizarCantidad/'+product.productID,{
+		'Cantidad':product.productAmount,
+        },configuracion).then(function () {
+        }).catch(function(error){
+			alert("Error eliminando"+error);
+        }); 
       }
     },
-
+	BorrarLinea(id,name){
+		let me = this;
+		this.products = this.products.filter(e => e.productID != id)
+		let header={"Authorization" : "Bearer "};
+        let configuracion= {headers : header};
+        axios.delete('api/Carritos/DeleteCarrito/'+id,{
+            'Nombre':name,
+        },configuracion).then(function () {
+        }).catch(function(error){
+			alert("Error eliminando"+error)
+			me.Mensaje = "Error eliminando "+name+" al carrito: "+error;
+			me.cartNotification = true;
+        }); 
+	},
     aumentarCantidadProducto(product){
-      product.productAmount = product.productAmount+1;
-      product.productSubtotal = product.productAmount*product.productPrice
-      
+		product.productAmount = product.productAmount+1;
+		product.productSubtotal = product.productAmount*product.productPrice
+		let header={"Authorization" : "Bearer "};
+		let configuracion= {headers : header};
+		axios.put('api/Carritos/ActualizarCantidad/'+product.productID,{
+			
+			'Cantidad':product.productAmount,
+		},configuracion).then(function () {
+		}).catch(function(error){
+			alert("Error eliminando"+error);
+		}); 
     },
 
+	SelectProducts(){
+		let me = this;
+		let clientesArray = []; 
+		let header={"Authorization" : "Bearer "};
+		let configuracion= {headers : header};
+			axios.get('api/Carritos/ObtenerProductos/King%20Vape/' + this.clientID,configuracion).then(function(response){
+			clientesArray=response.data;
+			clientesArray.map(function(x){
+				me.products.push({ 
+				productID:x.id,
+				productName:x.nombre, 
+				productPrice:x.precioVenta, 
+				productAmount:x.cantidad,
+				productImage:x.foto,
+				productSubtotal:(x.cantidad*x.precioVenta)
+				})
+			});
+		})
+	}
   },
-
   created(){
-    const url = 'http://pruebas.noah.cr/Backend/api/Carritos/ObtenerProductos/King%20Vape/' + this.clientID
-    this.$http.get(url).then((result) => {
-      for(var product in result.data){
-        this.products.push({ 
-          productID:result.data[product].id,
-          productName:result.data[product].nombre, 
-          productPrice:result.data[product].precioVenta, 
-          productAmount:result.data[product].cantidad,
-          productImage:result.data[product].foto,
-          productSubtotal:(result.data[product].cantidad*result.data[product].precioVenta)
-          })
-      }
-    })
-
-    console.log(this.products)
+	this.SelectProducts();
   },
 
   computed: {
@@ -509,6 +587,20 @@ export default {
       } else {
         return "desktop";
       }
+    },
+
+	calcularSubTotal:function(){
+	var resultado=0.0;
+	for(var i=0;i<this.products.length;i++){
+			resultado += this.products[i].productPrice * this.products[i].productAmount;
+	}
+		return resultado;
+    },
+
+	calcularTotal:function(){
+	var resultado=0.0;
+	resultado = parseInt(this.radios) + this.calcularSubTotal;
+		return resultado;
     },
 
     emptyProductList(){

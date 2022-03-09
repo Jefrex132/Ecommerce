@@ -26,7 +26,7 @@ import 'swiper/swiper-bundle.css'
         name: 'LandingPage',
 
         created(){
-            const url = 'http://pruebas.noah.cr/Backend/api/Carrusel/SelectBrands/King%20Vape/1'
+            const url = 'https://localhost:44388/api/Carrusel/SelectBrands/King%20Vape/1'
             this.$http.get(url).then((result) => {
                 for(var brand in result.data){
                     this.brands.push({imageSource: result.data[brand].foto})

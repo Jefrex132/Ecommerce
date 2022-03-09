@@ -9,7 +9,7 @@
         <br><br><br><br><br><br><br>
         <div style="display: flex; width: 1200px; margin: 0 auto;">
           <div>
-            <v-img height="400px" width="400px" contain :src="require('../assets/images/productPlaceholder.jpg')">
+            <v-img height="400px" width="400px" contain :src="productImage">
             </v-img>
           </div>
           <div style="width: 60vw; text-align: justify;">
@@ -26,7 +26,7 @@
               <div v-if="selectedNicotinLevel!='Elige una opción'">
                 <v-divider></v-divider>
                 <br>
-                <label>Disponibilidad: </label>
+                <label>Disponibilidad: </label> {{availableProductAmount}}
                 <label v-if="availableProductAmount>0" style="color: green;">Hay existencias</label>
                 <label v-else style="color: red;">No hay existencias</label>
                 <br><br>
@@ -361,15 +361,16 @@ Solo los usuarios registrados que hayan comprado este producto pueden hacer una 
   },
 
   created(){
-    let url = 'http://pruebas.noah.cr/Backend/api/Productos/MostrarFichaProducto/' + this.$route.params.id + '/King%20Vape'
+    let url = 'https://localhost:44388/api/Productos/MostrarFichaProducto/' + this.$route.params.id + '/King%20Vape'
     this.$http.get(url).then((result) => {
-      this.productName = result.data.descripcion
-      this.mainInfo = result.data.subFamilia
-      this.productPrice = result.data.precioVenta
-      this.productCategory = result.data.categoria
+	this.productName = result.data.descripcion
+	this.mainInfo = result.data.subFamilia
+	this.productPrice = result.data.precioVenta
+	this.productCategory = result.data.categoria
+	this.productImage = result.data.localizacion
     })
     
-    url = 'http://pruebas.noah.cr/Backend/api/ProductosWebs/ConsultaStock/' + this.$route.params.id + '/King%20Vape'
+    url = 'https://localhost:44388/api/ProductosWebs/ConsultaStock/' + this.$route.params.id + '/King%20Vape'
     this.$http.get(url).then((result) => {
       this.availableProductAmount = result.data.stock;
     })

@@ -118,7 +118,7 @@
                   <label class="cartPayLabelMobile" style="font-size: 15px; font-weight: bold;">x {{product.productAmount}}</label>
                 </div>
                 <div style="text-align: right; margin-right: 25px; margin-top:15px;" :key="product">
-                  <label class="cartPayLabelMobile" style="font-size: 15px;">{{product.productSubtotal}}</label>
+                  <label class="cartPayLabelMobile" style="font-size: 15px;">₡{{product.productSubtotal}}</label>
                 </div>
               </template>
             </div>
@@ -130,7 +130,7 @@
                 <label class="cartPayLabelMobile" style="font-weight: bold; color:gray; font-size: 17px; margin: 30px;">Subtotal</label>
               </div>
               <div style="text-align: right;">
-                <label class="cartPayLabelMobile" style="font-weight: bold; color:gray; font-size: 17px; margin: 30px;">{{subtotal}}</label>
+                <label class="cartPayLabelMobile" style="font-weight: bold; color:gray; font-size: 17px; margin: 30px;">{{calcularSubTotal}}</label>
               </div>
             </div>
             <hr style="width: 300px; top:10px; position: relative; margin: 0 auto;">
@@ -140,18 +140,23 @@
                 <label class="cartPayLabelMobile" style="font-weight: bold; color: gray; font-size: 17px; margin: 30px;">Envío</label>
               </div>
               <div style="text-align: right; margin-right: 30px;">
-                <div>
-                  <input name="sendInfo" type="radio" id="sendByMail" value="0" style="margin: 10px;">
-                  <label for="sendByMail" class="cartPayRadioDesktop">Correos de Costa Rica: ₡3,500.00</label>
-                </div> 
-                <div>
-                  <input name="sendInfo" type="radio" id="sendFree" value="1" style="margin: 10px;">
-                  <label for="sendFree" class="cartPayRadioDesktop">Envío Gratuito</label>
-                </div> 
-                <div>
-                  <input name="sendInfo" type="radio" id="pickInStore" value="2" style="margin: 10px;">
-                  <label for="pickInStore" class="cartPayRadioDesktop">Retirar en King Vape Plaza Zapote Centro Comercial</label>
-                </div> 
+                <v-radio-group v-model="radios">
+					<v-radio value=0>
+						<template v-slot:label>
+						<div>Envío Gratuito</div>
+						</template>
+					</v-radio>
+					<v-radio value=3500>
+						<template v-slot:label>
+						<div>Correos de Costa Rica:<strong class="success--text">₡3,500.00</strong></div>
+						</template>
+					</v-radio>
+					<v-radio value=0>
+						<template v-slot:label>
+						<div>Retirar en King Vape Plaza Zapote <strong class="primary--text">Duckduckgo</strong></div>
+						</template>
+					</v-radio>
+				</v-radio-group>  
               </div>
             </div>
             <hr style="width: 300px; top:10px; position: relative; margin: 0 auto;">
@@ -161,7 +166,7 @@
                 <label class="cartPayLabelMobile" style="font-weight: bold; color:gray; font-size: 17px; margin: 30px;">Total</label>
               </div>
               <div style="text-align: right;">
-                <label class="cartPayLabelMobile" style="font-weight: bold; color:gray; font-size: 17px; margin: 30px;">{{total}}</label>
+                <label class="cartPayLabelMobile" style="font-weight: bold; color:gray; font-size: 17px; margin: 30px;">{{calcularTotal}}</label>
               </div>
             </div>
             <hr style="width: 300px; top:10px; position: relative; margin: 0 auto;">
@@ -366,18 +371,23 @@
               <label class="cartPayLabelMobile" style="font-weight: bold; color: gray; font-size: 17px; margin: 30px;">Envío</label>
             </div>
             <div style="text-align: right; margin-right: 30px;">
-              <div>
-                <input name="sendInfo" type="radio" id="sendByMail" value="0" style="margin: 10px;">
-                <label for="sendByMail" class="cartPayRadioDesktop">Correos de Costa Rica: ₡3,500.00</label>
-              </div> 
-              <div>
-                <input name="sendInfo" type="radio" id="sendFree" value="1" style="margin: 10px;">
-                <label for="sendFree" class="cartPayRadioDesktop">Envío Gratuito</label>
-              </div> 
-              <div>
-                <input name="sendInfo" type="radio" id="pickInStore" value="2" style="margin: 10px;">
-                <label for="pickInStore" class="cartPayRadioDesktop">Retirar en King Vape Plaza Zapote Centro Comercial</label>
-              </div> 
+              <v-radio-group v-model="radios">
+					<v-radio value=0>
+						<template v-slot:label>
+						<div>Envío Gratuito</div>
+						</template>
+					</v-radio>
+					<v-radio value=3500>
+						<template v-slot:label>
+						<div>Correos de Costa Rica:<strong class="success--text">₡3,500.00</strong></div>
+						</template>
+					</v-radio>
+					<v-radio value=0>
+						<template v-slot:label>
+						<div>Retirar en King Vape Plaza Zapote <strong class="primary--text">Duckduckgo</strong></div>
+						</template>
+					</v-radio>
+				</v-radio-group> 
             </div>
           </div>
           <hr style="width: 80vw; top:10px; position: relative; margin: 0 auto;">
@@ -507,6 +517,7 @@
 import Navbar from "../components/Navbar.vue";
 import WhatsappLogo from "../components/WhatsappLogo.vue";
 import Footer from "../components/Footer.vue"
+import axios from 'axios';
 
 export default {
   name: "Checkout",
@@ -521,7 +532,7 @@ export default {
     /* MODELS */
     checkoutDialog: false,
     sinpePayInfo: 'BAC CREDOMATIC COLONES\nArafat Bassam Jabara Jebara\nCédula jurídica: 3-101-784144\nCuenta IBAN: CR26010200009434382917',
-
+	radios: 0,
     orderNumber: 23772,
     orderDate: '08 enero, 2022',
     orderEmail: 'testEmail@gmail.com',
@@ -629,30 +640,9 @@ export default {
     password: '',
     info: '',
     giftCard: '',
-
+	clientID: 156,
     products:
     [
-      {
-        productImage: 'productPlaceholder.jpg',
-        productName: 'Wes Coil Alien Clapton 0.12 Dual',
-        productPrice: '₡3,000.00',
-        productAmount: '3',
-        productSubtotal: '₡3,000.00'
-      },
-      {
-        productImage: 'productPlaceholder.jpg',
-        productName: 'Wes Coil Alien Clapton 0.12 Dual',
-        productPrice: '₡3,000.00',
-        productAmount: '3',
-        productSubtotal: '₡3,000.00'
-      },
-      {
-        productImage: 'productPlaceholder.jpg',
-        productName: 'Wes Coil Alien Clapton 0.12 Dual',
-        productPrice: '₡3,000.00',
-        productAmount: '3',
-        productSubtotal: '₡3,000.00'
-      }
     ],
 
     subtotal: '₡3,000.00',
@@ -671,6 +661,19 @@ export default {
         return "desktop";
       }
     },
+	calcularSubTotal:function(){
+	var resultado=0.0;
+	for(var i=0;i<this.products.length;i++){
+			resultado += this.products[i].productPrice * this.products[i].productAmount;
+	}
+		return resultado;
+    },
+
+	calcularTotal:function(){
+	var resultado=0.0;
+	resultado = parseInt(this.radios) + this.calcularSubTotal;
+		return resultado;
+    },
   },
 
   methods: {
@@ -682,8 +685,76 @@ export default {
       a.document.write('</body></html>');
       a.document.close();
       a.print();
-    }
-  }
+    },
+
+	CrearPedido(){
+		var momentoActual = new Date(); 
+		var hora = momentoActual.getHours(); 
+		var minuto = momentoActual.getMinutes(); 
+		var segundo = momentoActual.getSeconds();
+		var time = hora + ":" + minuto + ":" + segundo;
+		let header={"Authorization" : "Bearer "};
+                let configuracion= {headers : header};
+                axios.post('api/ordenexpress/CrearMesaTotal',{
+                      'fecha': this.today.toString(),//MM/dd/YYYY
+                      'cajero': this.$store.state.usuario.nombre,
+                      'total': this.Total,
+                      'Nombre': this.clienteNombre,
+                      'telefono': this.clienteTelefono,
+                      'Direccion': this.direccion,
+                      'orden': this.orden,
+                      'tipoPago1': this.tipoPago,
+                      'Hora': time,
+                      'descuento': this.descuento,
+                      'localidad': this.localidad,
+                      'estado': 0,
+                      'nota':" Paga con: " +this.metodoPago+" "+this.pagaCon+" Pedido desde: "+this.metodoToma+this.nota,
+                      'tipoCompra' :this.modoretiro,
+                      'detalles': this.detalles,
+                      'correo': this.email,
+                      'latitud': this.latitud,
+                      'longitud': this.longitud,
+                      'Mesa':this.MesaSeleccionada,
+					  'TipoCedula':this.clienteTipoCedula,
+					  'Cedula':this.clienteCedula,
+					  'Direccion2':this.DireccionCliente2,
+					  'Direccion3':this.DireccionCliente3,
+                      
+                },configuracion).then(function (response) {
+					
+					alert("Pedido realizado con éxito" +response);
+
+                  })
+                  .catch(function (error) {
+                      alert(`Lo sentimos ha ocurrido un error, notifiuelo al 4070-1889`);  
+                })
+	},
+
+	SelectProducts(){
+		let me = this;
+		let clientesArray = []; 
+		let header={"Authorization" : "Bearer "};
+		let configuracion= {headers : header};
+			axios.get('api/Carritos/ObtenerProductos/King%20Vape/' + this.clientID,configuracion).then(function(response){
+			clientesArray=response.data;
+			clientesArray.map(function(x){
+				me.products.push({ 
+				productID:x.id,
+				productName:x.nombre, 
+				productPrice:x.precioVenta, 
+				productAmount:x.cantidad,
+				productImage:x.foto,
+				productSubtotal:(x.cantidad*x.precioVenta)
+				})
+			});
+		})
+	}
+  },
+
+  created(){
+    this.SelectProducts();
+  },
+
 
 };
 </script>

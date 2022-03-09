@@ -8,11 +8,11 @@
       <template v-for="product in products">
         <div :key="product" class="productContainerDesktop">
           <div class="imageContainerDesktop">
-            <v-img height="230" width="230" :src="require('../assets/images/' + product.imageSource)" class="productImageDesktop" @click="openProduct(product.id)"></v-img>
+            <v-img height="230" width="230" :src="product.imageSource" class="productImageDesktop" @click="openProduct(product.id)"></v-img>
             <v-tooltip left color="black">
               <template v-slot:activator="{ on, attrs }">
-                <v-icon color="black" class="shoppingCartDesktop" v-bind="attrs" v-on="on" @click="addProductToCart(product, true)">mdi-cart</v-icon>
-                <v-snackbar right shaped top color="success" app v-model="cartNotification">Se ha agregado {{product.productName}} al carrito.</v-snackbar>
+                <v-icon color="black" class="shoppingCartDesktop" v-bind="attrs" v-on="on" @click="addProductToCart(product)">mdi-cart</v-icon>
+                <v-snackbar right shaped top color="success" app v-model="cartNotification">{{Mensaje}}</v-snackbar>
               </template>
               <span>Agregar al carrito</span>
             </v-tooltip>
@@ -231,6 +231,7 @@
 
 
 <script>
+import axios from 'axios';
 //import router from '../router';
 export default {
   /* MODELS */
@@ -243,16 +244,34 @@ export default {
   data: () => ({
     title: "PUFFS",
     products: [],
+	Localidad: "King Vape",
+	NoCliente: 156,
+	Mensaje: ""
   }),
 
   methods: {
-    addProductToCart(product, state){
-      if(state){
-        this.cartNotification = true;
-      }
-      else{
-        this.cartNotification = false;
-      }
+    addProductToCart(product){
+		let me=this;
+		let header={"Authorization" : "Bearer "};
+        let configuracion= {headers : header};
+        axios.post('api/Carritos/Crear',{
+            'Nombre':product.productName,
+            'Localidad': me.Localidad,
+            'NoCliente':me.NoCliente,
+            'CodigoProducto': product.id,
+            'PrecioVenta': product.productPrice,
+            'Cantidad': 1,
+            'Foto':product.imageSource,
+            'Puntos': 0,
+            'Acumula ':0,
+            'Otro':"0"
+        },configuracion).then(function () {
+			me.Mensaje = "Producto "+product.productName+" agregado de forma correcta ";
+			me.cartNotification = true;
+        }).catch(function(error){
+			me.Mensaje = "Error agregando "+product.productName+" al carrito: "+error
+			me.cartNotification = true;
+        }); 
     },
 
     openProduct(id){
@@ -264,7 +283,7 @@ export default {
   },
 
   created(){
-    const url = 'http://pruebas.noah.cr/Backend/api/Top4Vistatemporada/SelectTop4Temporada/King%20Vape'
+    const url = 'https://localhost:44388/api/Top4Vistatemporada/SelectTop4Temporada/King%20Vape'
     this.$http.get(url).then((result) => {
       for(var product in result.data){
         this.products.push(
@@ -273,7 +292,7 @@ export default {
           brandName:result.data[product].marca, 
           productName:result.data[product].descripcion, 
           productPrice:result.data[product].precioVenta,
-          imageSource: "productPlaceholder.jpg"
+          imageSource: result.data[product].imagen,
           })
       }
     })
